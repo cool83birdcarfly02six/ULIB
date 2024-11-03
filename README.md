@@ -37,8 +37,32 @@ end
 coroutine.wrap(GJLE_fake_script)()
 
 function funcs:ChangeTheme(color)
+
 for i,v in pairs(touilib:GetDescendants()) do
+local go = true
+pcall(function()
+if (v:IsA("Frame") and v.Parent.Parent.Name == "Toggle") or v:GetAttribute("Toggleinput") then
+    go = false
+    if v.BackgroundColor3 ~= Color3.fromRGB(66,66,66) then
+        v.BackgroundColor3 = color
+    end
+end
+end)
+
+
+
+local go = true
+if v:GetAttribute("NavigationImage") then
+    go = false
+    if v.ImageColor3 == getgenv().UIThemeColorElysium then
+        v.ImageColor3 = color
+    end
+end
+
+
+if go then
 if v:GetAttribute("Themeable") then
+
 pcall(function()
 v.ImageColor3 = color
 end)
@@ -47,7 +71,9 @@ pcall(function()
 end)
 end
 end
+end
 
+getgenv().UIThemeColorElysium = color
 end
     function funcs:AddTab(stuff)
         local obj = {}
@@ -120,6 +146,7 @@ UICorner.CornerRadius = UDim.new(0, 6)
 UICorner.Parent = ButtonBackgroun
 IconImage.Name = "IconImage"
 IconImage.Parent = ButtonBackgroun
+IconImage:SetAttribute("NavigationImage", true)
 IconImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 IconImage.BackgroundTransparency = 1.000
 IconImage.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -648,7 +675,7 @@ Frame.Size = UDim2.new(0, 260, 0, 28)
 Toggle_2.Name = "Toggle"
 Toggle_2.Parent = Frame
 Toggle_2.BackgroundColor3 = Color3.fromRGB(66, 66, 66)
-Toggle_2:SetAttribute("Themeable", true)
+Toggle_2:SetAttribute("Themeable", false)
 Toggle_2.BackgroundTransparency = 0.500
 Toggle_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Toggle_2.BorderSizePixel = 0
@@ -750,6 +777,7 @@ function obj:AddToggleInput(tb)
     Toggle_2.BorderSizePixel = 0
     Toggle_2.Position = UDim2.new(0.864898682, 0, 0.241000578, 0)
     Toggle_2.Size = UDim2.new(0, 29, 0, 14)
+    Toggle_2:SetAttribute("Toggleinput", true)
     UICorner.CornerRadius = UDim.new(0, 10)
     UICorner.Parent = Toggle_2
     Toggle_3.Name = "Toggle"
@@ -978,8 +1006,8 @@ SlideValue.TextXAlignment = Enum.TextXAlignment.Right
 local function CHBDQ_fake_script() -- Slider_2.slide 
 	local script = Instance.new('LocalScript', Slider_2)
 
-	local minimum = tb["Minimum"]
-	local maximum = tb["Maximum"]
+	local minimum = tb["Min"]
+	local maximum = tb["Max"]
 	local initial = tb["Initial"]
 	
 	local slider = script.Parent.Slider
