@@ -15,6 +15,11 @@ local TextLabel = Instance.new("TextLabel")
 local DropShadowHolder = Instance.new("Frame")
 local DropShadow = Instance.new("ImageLabel")
 local TabsNav = Instance.new("ScrollingFrame")
+
+
+
+
+
 local thepos = nil
 local current_tweening = nil
 TabsNav.ScrollBarThickness = 1
@@ -41,11 +46,9 @@ function funcs:ChangeTheme(color)
 for i,v in pairs(touilib:GetDescendants()) do
 local go = true
 pcall(function()
-if (v:IsA("Frame") and v.Parent.Parent.Name == "Toggle") or v:GetAttribute("Toggleinput") then
-    go = false
-    if v.BackgroundColor3 ~= Color3.fromRGB(66,66,66) then
-        v.BackgroundColor3 = color
-    end
+if v:GetAttribute("IsToggled") == true then
+v.Parent.BackgroundColor3 = color
+go = false
 end
 end)
 
@@ -729,6 +732,7 @@ local function ATIPE_fake_script()
 			toggle = false
 		end
         tb["Function"](toggle)
+        Toggle_3:SetAttribute("IsToggled", toggle)
 	end)
 	
 	
@@ -737,6 +741,264 @@ coroutine.wrap(ATIPE_fake_script)()
 
     return Toggle
 end
+
+
+function obj:AddDropdown(tb)
+    
+    local Dropdown = Instance.new("Frame")
+local Frame = Instance.new("TextButton")
+local TextButton = Instance.new("TextButton")
+local ImageLabel = Instance.new("ImageLabel")
+    local strok = Instance.new("UIStroke")
+    
+    strok.Thickness = 1.2
+    strok.Name = "strokethingy"
+    strok.Color = Color3.fromRGB(30, 30, 30)
+    strok.ApplyStrokeMode = "Border"
+    strok.Parent = Frame
+
+
+    
+
+local DropDownList = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local UIListLayout = Instance.new("UIListLayout")
+local ScrollingFrame = Instance.new("ScrollingFrame")
+local UIListLayoutFOORDOP = Instance.new("UIListLayout")
+UIListLayoutFOORDOP.Parent = ScrollingFrame
+UIListLayoutFOORDOP.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIListLayoutFOORDOP.SortOrder = Enum.SortOrder.LayoutOrder
+
+local TextBox = Instance.new("TextBox")
+local TextButtonda = Instance.new("TextButton")
+DropDownList.Name = "DropDown List"
+DropDownList.Visible = false
+DropDownList.Parent = MainBackground
+DropDownList.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+DropDownList.BackgroundTransparency = 0.500
+DropDownList.BorderColor3 = Color3.fromRGB(0, 0, 0)
+DropDownList.BorderSizePixel = 0
+DropDownList.Position = UDim2.new(0.373099923, 0, 0.0546318293, 0)
+DropDownList.Size = UDim2.new(0, 278, 0, 397)
+DropDownList.ZIndex = 123123123
+UICorner.CornerRadius = UDim.new(0, 6)
+UICorner.Parent = DropDownList
+UIListLayout.Parent = DropDownList
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+UIListLayout.Padding = UDim.new(0, 10)
+ScrollingFrame.Parent = DropDownList
+ScrollingFrame.Active = true
+ScrollingFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+ScrollingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ScrollingFrame.BorderSizePixel = 0
+strok:Clone().Parent = ScrollingFrame
+ScrollingFrame.Position = UDim2.new(0.0287769791, 0, 0.119185671, 0)
+ScrollingFrame.Size = UDim2.new(0, 262, 0, 251)
+ScrollingFrame.ScrollBarThickness = 1
+TextBox.Parent = DropDownList
+TextBox.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.BorderSizePixel = 0
+strok:Clone().Parent = TextBox
+TextBox.Position = UDim2.new(0.140287772, 0, 0.837531507, 0)
+TextBox.Size = UDim2.new(0, 200, 0, 30)
+TextBox.Font = Enum.Font.SourceSans
+TextBox.PlaceholderText = "Search"
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 14.000
+
+TextBox:GetPropertyChangedSignal("Text"):connect(function()
+    for _,v in pairs(ScrollingFrame:GetChildren()) do
+        if v:IsA("TextButton") then
+        local lower = string.lower(TextBox.Text)
+        local lowerplayer = string.lower(v.Text)
+
+        if string.match(lowerplayer,lower) then
+            v.Visible = true
+        else
+            v.Visible = false
+        end
+    end
+    end
+end)
+TextButtonda.Parent = DropDownList
+TextButtonda.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+TextButtonda.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButtonda.BorderSizePixel = 0
+TextButtonda.Position = UDim2.new(0.147482008, 0, 0.835012615, 0)
+TextButtonda.Size = UDim2.new(0, 214, 0, 35)
+strok:Clone().Parent = TextButtonda
+TextButtonda.Font = Enum.Font.SourceSans
+TextButtonda.Text = "Close"
+TextButtonda.TextColor3 = Color3.fromRGB(208, 208, 208)
+TextButtonda.TextSize = 14.000
+local function EETWTCT_fake_script() -- ScrollingFrame.autoscale 
+	local script = Instance.new('LocalScript', ScrollingFrame)
+
+	local ScrollFrame = script.Parent
+	local function UpdateScrollFrameSize()
+		local contentHeight = 0
+		for _, child in pairs(ScrollFrame:GetChildren()) do
+			if child:IsA("GuiObject") then
+				contentHeight = contentHeight + child.Size.Y.Offset
+			end
+		end
+		ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, contentHeight)
+	end
+	UpdateScrollFrameSize()
+	ScrollFrame.ChildAdded:Connect(UpdateScrollFrameSize)
+	ScrollFrame.ChildRemoved:Connect(UpdateScrollFrameSize)
+end
+coroutine.wrap(EETWTCT_fake_script)()
+local function CLGZ_fake_script() -- TextButton.LocalScript 
+	local script = Instance.new('LocalScript', TextButtonda)
+
+	script.Parent.MouseButton1Click:Connect(function()
+        
+		script.Parent.Parent.TextBox.Text = ""
+		script.Parent.Parent.Visible = false
+	end)
+end
+coroutine.wrap(CLGZ_fake_script)()
+
+
+
+
+
+Dropdown.Name = "Dropdown"
+Dropdown.Parent = acc
+Dropdown.BackgroundColor3 = Color3.fromRGB(85, 255, 255)
+Dropdown.BackgroundTransparency = 1.000
+Dropdown.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Dropdown.BorderSizePixel = 0
+Dropdown.Position = UDim2.new(0, 0, 0.183333337, 0)
+Dropdown.Size = UDim2.new(0, 278, 0, 29)
+
+Frame.Name = "Frame"
+Frame.Parent = Dropdown
+Frame.Active = false
+Frame.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.0323740989, 0, 0.00185841531, 0)
+Frame.Selectable = false
+Frame.Size = UDim2.new(0, 260, 0, 28)
+Frame.Text = ""
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.BackgroundTransparency = 1.000
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.ClipsDescendants = true
+TextButton.Position = UDim2.new(0.0369229838, 0, 0, 0)
+TextButton.Size = UDim2.new(0, 250, 0, 28)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = tb["Name"]
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextSize = 12.000
+TextButton.TextXAlignment = Enum.TextXAlignment.Left
+
+ImageLabel.Parent = Frame
+ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageLabel.BackgroundTransparency = 1.000
+ImageLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Position = UDim2.new(0.919230759, 0, 0.321428567, 0)
+ImageLabel.Rotation = 180.000
+ImageLabel.Size = UDim2.new(0, 10, 0, 10)
+ImageLabel.Image = "http://www.roblox.com/asset/?id=17475089042"
+
+-- Scripts:
+
+local function QBONV_fake_script() -- TextButton.LocalScript 
+	local script = Instance.new('LocalScript', TextButton)
+
+	local opened = false
+	local theirtween = nil
+    local tweenstroke = nil
+
+    script.Parent.MouseEnter:connect(function()
+        script.Parent.Parent.Parent.ZIndex = 999
+        pcall(function()
+            tweenstroke:Cancel()
+        end)
+        pcall(function()
+            theirtween:Cancel()
+        end)
+        local tween = game:GetService("TweenService"):Create(strok, TweenInfo.new(0.08, Enum.EasingStyle.Linear), {Thickness = 4})
+        tweenstroke = tween
+        tween:Play()
+
+        local tween2 = game:GetService("TweenService"):Create(script.Parent.Parent.ImageLabel, TweenInfo.new(0.2), {Rotation = 180})
+		theirtween = tween2
+		tween2:Play()
+
+
+    end)
+    
+    script.Parent.MouseLeave:connect(function()
+        script.Parent.Parent.Parent.ZIndex = 1
+        pcall(function()
+            tweenstroke:Cancel()
+        end)
+        pcall(function()
+            theirtween:Cancel()
+        end)
+    
+        local tween = game:GetService("TweenService"):Create(strok, TweenInfo.new(0.2, Enum.EasingStyle.Linear), {Thickness = 1.2})
+        tweenstroke = tween
+        tween:Play()
+
+        local tween2 = game:GetService("TweenService"):Create(script.Parent.Parent.ImageLabel, TweenInfo.new(0.2), {Rotation = 0})
+		theirtween = tween2
+		tween2:Play()
+
+    end)
+
+
+	script.Parent.MouseButton1Click:Connect(function()
+        DropDownList.Visible = not DropDownList.Visible
+        for i,v in pairs(ScrollingFrame:GetChildren()) do
+            if v:IsA('TextButton') then
+                v:Destroy()
+            end
+        end
+
+		for i,v in pairs(tb["Objects"]()) do
+            local dropbtn = Instance.new("TextButton")
+            strok:Clone().Parent = dropbtn
+dropbtn.Parent = ScrollingFrame
+dropbtn.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+dropbtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
+dropbtn.BorderSizePixel = 0
+dropbtn.Position = UDim2.new(0.0381679386, 0, 0.00859768968, 0)
+dropbtn.Size = UDim2.new(0, 259,0, 32)
+dropbtn.Font = Enum.Font.SourceSans
+dropbtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+dropbtn.TextSize = 14.000
+dropbtn.Text = v
+
+dropbtn.MouseButton1Click:connect(function()
+    DropDownList.Visible = not DropDownList.Visible
+    tb["Function"](v)
+    if tb["SaveSelection"] == true then
+        TextButton.Text = v
+    end
+end)
+
+
+
+        end
+	end)
+end
+coroutine.wrap(QBONV_fake_script)()
+
+
+    end
 
 
 function obj:AddToggleInput(tb)
@@ -771,13 +1033,12 @@ function obj:AddToggleInput(tb)
     Toggle_2.Name = "Toggle"
     Toggle_2.Parent = Frame
     Toggle_2.BackgroundColor3 = Color3.fromRGB(66, 66, 66)
-    Toggle_2:SetAttribute("Themeable", true)
     Toggle_2.BackgroundTransparency = 0.500
     Toggle_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Toggle_2.BorderSizePixel = 0
     Toggle_2.Position = UDim2.new(0.864898682, 0, 0.241000578, 0)
     Toggle_2.Size = UDim2.new(0, 29, 0, 14)
-    Toggle_2:SetAttribute("Toggleinput", true)
+    
     UICorner.CornerRadius = UDim.new(0, 10)
     UICorner.Parent = Toggle_2
     Toggle_3.Name = "Toggle"
@@ -785,6 +1046,7 @@ function obj:AddToggleInput(tb)
     Toggle_3.Active = false
     Toggle_3.BackgroundColor3 = getgenv().UIThemeColorElysium
     Toggle_3:SetAttribute("Themeable", true)
+    Toggle_3:SetAttribute("IsToggled", false)
     Toggle_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Toggle_3.BorderSizePixel = 0
     Toggle_3.Selectable = false
@@ -882,6 +1144,7 @@ coroutine.wrap(HKDL_fake_script)()
                 toggle = false
             end
             tb["Function"](toggle)
+            Toggle_3:SetAttribute("IsToggled", toggle)
         end)
         
         
@@ -1219,6 +1482,10 @@ touilib.Name = "toui;lib"
 touilib.Parent = game.CoreGui
 touilib.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+
+
+
+
 MainBackground.Name = "MainBackground"
 MainBackground.Parent = touilib
 MainBackground.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
@@ -1226,6 +1493,8 @@ MainBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
 MainBackground.BorderSizePixel = 0
 MainBackground.Position = UDim2.new(0.376762927, 0, 0.237562194, 0)
 MainBackground.Size = UDim2.new(0, 444, 0, 421)
+
+
 
 UICorner.CornerRadius = UDim.new(0, 6)
 UICorner.Parent = MainBackground
