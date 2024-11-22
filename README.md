@@ -471,6 +471,151 @@ end)
 end
 
 
+function obj:AddKeybind(tb)
+    
+    local strok = Instance.new("UIStroke")
+    strok.Thickness = 1.2
+    strok.Name = "strokethingy"
+    strok.Color = Color3.fromRGB(30, 30, 30)
+    strok.ApplyStrokeMode = "Border"
+    
+    -- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local Keybind = Instance.new("Frame")
+local TextButton = Instance.new("TextButton")
+local ImageLabel = Instance.new("ImageLabel")
+local Text = Instance.new("TextLabel")
+local Frame = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
+local TextButton_2 = Instance.new("TextButton")
+
+Keybind.Name = "Keybind"
+Keybind.Parent = acc
+Keybind.BackgroundColor3 = Color3.fromRGB(85, 255, 255)
+Keybind.BackgroundTransparency = 1.000
+Keybind.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Keybind.BorderSizePixel = 0
+Keybind.Position = UDim2.new(0, 0, 0.183333337, 0)
+Keybind.Size = UDim2.new(0, 278, 0, 29)
+Keybind.ZIndex = 5
+
+TextButton.Parent = Keybind
+TextButton.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.ClipsDescendants = true
+TextButton.Position = UDim2.new(0.0320000015, 0, 0.00200000009, 0)
+TextButton.Size = UDim2.new(0, 260, 0, 28)
+TextButton.AutoButtonColor = false
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = ""
+TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.TextSize = 14.000
+strok.Parent = TextButton
+
+ImageLabel.Parent = TextButton
+ImageLabel.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
+ImageLabel.BackgroundTransparency = 1.000
+ImageLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Position = UDim2.new(0.903999984, 0, 0.200000003, 0)
+ImageLabel.Size = UDim2.new(0, 18, 0, 18)
+ImageLabel.Image = "http://www.roblox.com/asset/?id=16630151971"
+ImageLabel.ImageColor3 = Color3.fromRGB(85, 170, 255)
+ImageLabel:SetAttribute("Themeable", true)
+Text.Name = "Text"
+Text.Parent = TextButton
+Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Text.BackgroundTransparency = 1.000
+Text.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Text.BorderSizePixel = 0
+Text.Position = UDim2.new(0.0400000922, 0, 0, 0)
+Text.Size = UDim2.new(0, 168, 0, 28)
+Text.Font = Enum.Font.SourceSansSemibold
+Text.Text = tb["Name"]
+Text.TextColor3 = Color3.fromRGB(255, 255, 255)
+Text.TextSize = 13.000
+Text.TextXAlignment = Enum.TextXAlignment.Left
+
+Frame.Parent = Keybind
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BackgroundTransparency = 1.000
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.449999988, 0, 0.126000002, 0)
+Frame.Size = UDim2.new(0, 100, 0, 20)
+
+UIListLayout.Parent = Frame
+UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+UIListLayout.Padding = UDim.new(0, 5)
+
+TextButton_2.Parent = Frame
+TextButton_2.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+TextButton_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_2.BorderSizePixel = 0
+TextButton_2.ClipsDescendants = true
+TextButton_2.Position = UDim2.new(0.25999999, 0, 0.0250000004, 0)
+TextButton_2.Size = UDim2.new(0, 82, 0, 19)
+TextButton_2.AutoButtonColor = false
+TextButton_2.Font = Enum.Font.SourceSans
+TextButton_2.Text = tb['Default'].Name or "No Key"
+TextButton_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_2.TextSize = 14.000
+strok:Clone().Parent = TextButton_2
+
+-- Scripts:
+
+local function QLNVQN_fake_script() -- TextButton_2.LocalScript 
+	local script = Instance.new('LocalScript', TextButton_2)
+
+	
+	
+	local userInputService = game:GetService("UserInputService")
+	local function getmyebasdasda()
+		script.Parent.Text = "..."
+	
+		local inputEvent
+		inputEvent = userInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+			if not gameProcessedEvent then
+				wait(0.05)
+				if tostring(input.KeyCode.Name) ~= "Unknown" then
+				
+					tb['Function'](input.KeyCode)
+                    script.Parent.Text = "" .. tostring(input.KeyCode.Name)
+
+				else
+					tb['Function'](input.UserInputType)
+                    script.Parent.Text = "" .. tostring(input.UserInputType.Name)
+
+				end
+				inputEvent:Disconnect()
+			end
+		end)
+	end
+	
+	
+	script.Parent.MouseButton1Click:Connect(getmyebasdasda)
+	
+end
+coroutine.wrap(QLNVQN_fake_script)()
+
+
+    return Keybind
+end
+
+
+
+
+
+
+
+
 function obj:AddButtonInput(tb)
     local Button = Instance.new("Frame")
     --Button.ZIndex = 1
