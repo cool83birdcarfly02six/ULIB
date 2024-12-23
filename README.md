@@ -1272,8 +1272,9 @@ coroutine.wrap(HKDL_fake_script)()
         local script = Instance.new('LocalScript', Toggle_3)
     
         local toggle = false
-        script.Parent.MouseButton1Click:Connect(function()
-            if not toggle then
+
+	function onclickedt()
+	if not toggle then
                 local tween = game:GetService("TweenService"):Create(script.Parent, TweenInfo.new(0.3, Enum.EasingStyle.Exponential), {Position = UDim2.new(0.515, 0,0, 0)})
                 tween:Play()
                 
@@ -1290,14 +1291,18 @@ coroutine.wrap(HKDL_fake_script)()
             end
             tb["Function"](toggle)
             Toggle_3:SetAttribute("IsToggled", toggle)
-        end)
+	end
+        script.Parent.MouseButton1Click:Connect(onclickedt)
         
         
     end
     coroutine.wrap(ATIPE_fake_script)()
-    
+    if tb['ReturnEditable'] then
+	return onclickedt
+    else
         return Toggle
     end
+end
 
 
 
