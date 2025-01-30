@@ -1610,11 +1610,7 @@ end
 --registerbtn()
 TabsNav.ChildAdded:Connect(function(c)
     if c:IsA("Frame") then
-	for i,v in pairs(c:GetChildren()) do
-	if v.Name == "NavButton" then
-	registerbtn(v.ButtonBackgroun)
-	end
-	end
+	registerbtn(c:WaitForChild("NavButton"):WaitForChild("ButtonBackgroun"))
     end
 end)
     end
