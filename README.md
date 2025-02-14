@@ -1447,7 +1447,7 @@ local function CHBDQ_fake_script() -- Slider_2.slide
         tb["Function"](tonumber(math.floor((bar.Size.X.Scale * (maximum - minimum)) + minimum)))
 	end)
 	game:GetService("UserInputService").InputEnded:Connect(function(input, gp)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			held = false
 		end
 	end)
