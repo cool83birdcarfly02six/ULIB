@@ -856,7 +856,7 @@ Text.Text = tb["Name"]
 Text.TextColor3 = Color3.fromRGB(255, 255, 255)
 Text.TextSize = 13.000
 Text.TextXAlignment = Enum.TextXAlignment.Left
-local function ATIPE_fake_script()
+
 	local script = Instance.new('LocalScript', Toggle_3)
 
 	local toggle = false
@@ -882,8 +882,7 @@ local function ATIPE_fake_script()
 	script.Parent.MouseButton1Click:connect(onclickedt)
 	
 	
-end
-coroutine.wrap(ATIPE_fake_script)()
+
 
 if tb['ReturnEditable'] then
 	return onclickedt
