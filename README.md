@@ -860,7 +860,7 @@ local function ATIPE_fake_script()
 	local script = Instance.new('LocalScript', Toggle_3)
 
 	local toggle = false
-	script.Parent.MouseButton1Click:Connect(function()
+	local onclickedt = function()
 		if not toggle then
 			local tween = game:GetService("TweenService"):Create(script.Parent, TweenInfo.new(0.3, Enum.EasingStyle.Exponential), {Position = UDim2.new(0.515, 0,0, 0)})
 			tween:Play()
@@ -878,13 +878,19 @@ local function ATIPE_fake_script()
 		end
         tb["Function"](toggle)
         Toggle_3:SetAttribute("IsToggled", toggle)
-	end)
+	end
+	script.Parent.MouseButton1Click:connect(onclickedt)
 	
 	
 end
 coroutine.wrap(ATIPE_fake_script)()
 
-    return Toggle
+if tb['ReturnEditable'] then
+	return onclickedt
+    else
+        return Toggle
+    end
+
 end
 
 
