@@ -9,11 +9,10 @@ function library:CreateGui(parameters)
     else
         for i,v in pairs(game:GetChildren()) do
             if v:IsA("CoreGui") then
-                --LightuxUILibRedo.Parent = v
+                LightuxUILibRedo.Parent = v
             end
         end
     end
-    LightuxUILibRedo.Parent = game.Players.LocalPlayer.PlayerGui
     local Draggable = Instance.new("Frame")
     local Mainframe = Instance.new("Frame")
     local DropShadowHolder = Instance.new("Frame")
