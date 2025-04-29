@@ -9,10 +9,11 @@ function library:CreateGui(parameters)
     else
         for i,v in pairs(game:GetChildren()) do
             if v:IsA("CoreGui") then
-                LightuxUILibRedo.Parent = v
+                --LightuxUILibRedo.Parent = v
             end
         end
     end
+    LightuxUILibRedo.Parent = game.Players.LocalPlayer.PlayerGui
     local Draggable = Instance.new("Frame")
     local Mainframe = Instance.new("Frame")
     local DropShadowHolder = Instance.new("Frame")
@@ -681,6 +682,7 @@ function library:CreateGui(parameters)
             UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
             UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
             Fake.Name = "Fake"
+            Fake.Text = ""
             Fake.Parent = Frame
             Fake.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             Fake.BackgroundTransparency = 1.000
@@ -694,6 +696,7 @@ function library:CreateGui(parameters)
             Fake.TextSize = 14.000
             Fake.TextTransparency = 1.000
             Fake_2.Name = "Fake"
+            Fake_2.Text = ""
             Fake_2.Parent = Frame
             Fake_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             Fake_2.BackgroundTransparency = 1.000
@@ -999,5 +1002,6 @@ function library:CreateGui(parameters)
 
     return GuiFunctions
 end
+
 
 return library
