@@ -216,7 +216,7 @@ function library:CreateGui(parameters)
 
     function GuiFunctions:AddPage(parameters)
         local PageFunctions = {}
-        local SizeMultiplier = 9.071428571428571
+        local SizeMultiplier = 7.071428571428571
         local NavigationButton = Instance.new("TextButton")
         local Page = Instance.new("ScrollingFrame")
         local PageData = {
@@ -994,6 +994,20 @@ function library:CreateGui(parameters)
 
             table.insert(UIElements, ElementData)
             return ElementData
+        end
+
+
+        function PageFunctions:AddGap(parameters)
+            local gp = Instance.new("Frame")
+            gp.Name = "SliderInput"
+            gp.Parent = GetGroup(parameters["Group"] or "Main")
+            gp.BackgroundColor3 = Color3.fromRGB(85, 255, 255)
+            gp.BackgroundTransparency = 1.000
+            gp.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            gp.BorderSizePixel = 0
+            gp.Position = UDim2.new(0.00318471342, 0, 0.802675664, 0)
+            gp.Size = UDim2.new(0, 156, 0, parameters["Gap"] or 40)
+
         end
 
         return PageFunctions
