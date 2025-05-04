@@ -1420,7 +1420,7 @@ function library:CreateGui(parameters)
                 
                 
                 
-                ElementData.Trigger = SetColor
+                ElementData.Trigger = setColor
 
                 local togglebtn = scripte.Main.Options.BoxToggle.TOGGLEBUTTON
                 togglebtn.MouseButton1Click:Connect(function()
@@ -1476,6 +1476,84 @@ function library:CreateGui(parameters)
             TextButton.MouseButton1Click:connect(function()
                 ColorPicker.Visible = false
             end)
+
+            table.insert(UIElements, ElementData)
+
+            return ElementData
+        end
+
+        function PageFunctions:AddKeybind(parameters)
+            local ElementData = {
+                ["Type"] = "Keybind",
+                ["PageData"] = PageData,
+                ["Trigger"] = nil,
+                ["Object"] = nil
+            }
+
+            local Keybind = Instance.new("Frame")
+            local TextLabel = Instance.new("TextLabel")
+            local Box = Instance.new("TextButton")
+            local UICorner = Instance.new("UICorner")
+            Keybind.Name = "Keybind"
+            Keybind.Parent = GetGroup(parameters["Group"] or "Main")
+            Keybind.BackgroundColor3 = Color3.fromRGB(85, 255, 255)
+            Keybind.BackgroundTransparency = 1.000
+            Keybind.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            Keybind.BorderSizePixel = 0
+            Keybind.Position = UDim2.new(0, 0, 0.778846145, 0)
+            Keybind.Size = UDim2.new(0, 156, 0, 23)
+            TextLabel.Parent = Keybind
+            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            TextLabel.BackgroundTransparency = 1.000
+            TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            TextLabel.BorderSizePixel = 0
+            TextLabel.Position = UDim2.new(0.0450001247, 0, 0, 0)
+            TextLabel.Size = UDim2.new(0, 117, 0, 23)
+            TextLabel.Font = Enum.Font.SourceSansSemibold
+            TextLabel.Text = "BoxChoice"
+            TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            TextLabel.TextSize = 13.000
+            TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+            Box.Name = "Box"
+            Box.Parent = Keybind
+            Box.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
+            Box.BorderColor3 = Color3.fromRGB(20, 20, 20)
+            Box.BorderSizePixel = 2
+            Box.Position = UDim2.new(0.521254301, 0, 0.117000416, 0)
+            Box.Size = UDim2.new(0, 68, 0, 17)
+            Box.Font = Enum.Font.SourceSansSemibold
+            Box.Text = "Select"
+            Box.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Box.TextSize = 12.000
+            Box.TextStrokeTransparency = 0.000
+            Box.TextWrapped = true
+            UICorner.CornerRadius = UDim.new(0, 4)
+            UICorner.Parent = Box
+            local userInputService = game:GetService("UserInputService")
+            local function getmyebasdasda()
+                Box.Text = "..."
+                local inputEvent
+                inputEvent = userInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+                    if not gameProcessedEvent then
+                        wait(0.05)
+                        if tostring(input.KeyCode.Name) ~= "Unknown" then
+                            Box.Text = "" .. tostring(input.KeyCode.Name)
+                            parameters["Function"](input.KeyCode)
+                        else
+                            Box.Text = "" .. tostring(input.UserInputType.Name)
+                            parameters["Function"](input.UserInputType)
+                        end
+                        inputEvent:Disconnect()
+                    end
+                end)
+            end
+            Box.MouseButton1Click:Connect(getmyebasdasda)
+
+
+
+            if parameters["Initial"] then
+                Box.Text = parameters["Initial"].Name
+            end
 
             table.insert(UIElements, ElementData)
 
