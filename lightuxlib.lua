@@ -1421,7 +1421,7 @@ function library:CreateGui(parameters)
                 
                 
                 
-                ElementData.Trigger = setColor
+                ElementData.Trigger = SetColor
 
                 local togglebtn = scripte.Main.Options.BoxToggle.TOGGLEBUTTON
                 togglebtn.MouseButton1Click:Connect(function()
@@ -1452,7 +1452,7 @@ function library:CreateGui(parameters)
                 local default = parameters["Default"] or parameters["Initial"]
 
                 if default then
-                    setColor(default, false)
+                    SetColor(default, false)
                 end
                 
                 coroutine.wrap(function()
