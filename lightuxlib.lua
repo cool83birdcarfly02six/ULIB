@@ -577,10 +577,17 @@ function library:CreateGui(parameters)
 
             ElementData.Trigger = Set
 
-            TextBox.Changed:connect(function()
+            TextBox:GetPropertyChangedSignal("Text"):connect(function()
                 ElementData.Attributes.Text = TextBox.Text
                 OnChanged(TextBox.Text, false)
             end)
+
+            --[[
+            TextBox.Changed:connect(function()
+                ElementData.Attributes.Text = TextBox.Text
+                OnChanged(TextBox.Text, false)
+            end)]]--
+
             TextBox.FocusLost:connect(function()
                 ElementData.Attributes.Text = TextBox.Text
                 OnChanged(TextBox.Text, true)
@@ -1010,11 +1017,456 @@ function library:CreateGui(parameters)
 
         end
 
+        function PageFunctions:AddColorPicker(parameters)
+            local ElementData = {
+                ["Type"] = "ColorPicker",
+                ["Trigger"] = nil,
+                ["Object"] = nil,
+                ["Attributes"] = {
+                    ["Color"] = 0
+                }
+            }
+
+            local ColorPicker = Instance.new("Frame")
+            local ColorBox = Instance.new("Frame")
+            local TextLabel = Instance.new("TextLabel")
+            local Box = Instance.new("TextButton")
+            local UICorner = Instance.new("UICorner")
+            ColorBox.Name = "ColorBox"
+            ColorBox.Parent = GetGroup(parameters["Group"] or "Main")
+            ColorBox.BackgroundColor3 = Color3.fromRGB(85, 255, 255)
+            ColorBox.BackgroundTransparency = 1.000
+            ColorBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            ColorBox.BorderSizePixel = 0
+            ColorBox.Position = UDim2.new(0, 0, 0.778846145, 0)
+            ColorBox.Size = UDim2.new(0, 156, 0, 23)
+            TextLabel.Parent = ColorBox
+            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            TextLabel.BackgroundTransparency = 1.000
+            TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            TextLabel.BorderSizePixel = 0
+            TextLabel.Position = UDim2.new(0.0450001247, 0, 0, 0)
+            TextLabel.Size = UDim2.new(0, 117, 0, 23)
+            TextLabel.Font = Enum.Font.SourceSansSemibold
+            TextLabel.Text = parameters["Name"] or "Pick Color"
+            TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            TextLabel.TextSize = 13.000
+            TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+            Box.Name = "Box"
+            Box.Parent = ColorBox
+            Box.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Box.BorderColor3 = Color3.fromRGB(20, 20, 20)
+            Box.BorderSizePixel = 2
+            Box.Position = UDim2.new(0.666795015, 0, 0.117000416, 0)
+            Box.Size = UDim2.new(0, 45, 0, 17)
+            Box.Font = Enum.Font.SourceSansSemibold
+            Box.Text = ""
+            Box.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Box.TextSize = 12.000
+            Box.TextStrokeTransparency = 0.000
+            Box.TextWrapped = true
+            UICorner.CornerRadius = UDim.new(0, 4)
+            UICorner.Parent = Box
+
+            Box.MouseButton1Click:connect(function()
+                ColorPicker.Visible = not ColorPicker.Visible
+            end)
+            
+
+            --color block part --
+            
+            local Main = Instance.new("Frame")
+            local TextButton = Instance.new("TextButton")
+            local UICorner = Instance.new("UICorner")
+            local UICorner_2 = Instance.new("UICorner")
+            local ColrBlock = Instance.new("Frame")
+            local uistroke = Instance.new("UIStroke")
+            uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            uistroke.Thickness = 2
+            uistroke.Parent = ColrBlock
+            local UICorner_3 = Instance.new("UICorner")
+            local Options = Instance.new("Frame")
+            local UIListLayout = Instance.new("UIListLayout")
+            local BoxToggle = Instance.new("Frame")
+            local TextLabel = Instance.new("TextLabel")
+            local TOGGLEBUTTON = Instance.new("TextButton")
+            local UIListLayout_2 = Instance.new("UIListLayout")
+            local ColorBlock = Instance.new("ImageButton")
+            local Picker = Instance.new("Frame")
+            local ValueBlock = Instance.new("ImageButton")
+            local Picker_2 = Instance.new("Frame")
+            local UIListLayout_3 = Instance.new("UIListLayout")
+            local Fake = Instance.new("TextLabel")
+            ColorPicker.Name = "ColorPicker"
+            ColorPicker.Parent = Mainframe
+            ColorPicker.Active = true
+            ColorPicker.Visible = false
+            ColorPicker.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            ColorPicker.BackgroundTransparency = 0.500
+            ColorPicker.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            ColorPicker.BorderSizePixel = 0
+            ColorPicker.Position = UDim2.new(0, 0, 0.168021351, 0)
+            ColorPicker.Size = UDim2.new(0, 336, 0, 306)
+            Main.Name = "Main"
+            Main.Parent = ColorPicker
+            Main.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+            Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            Main.BorderSizePixel = 0
+            Main.ClipsDescendants = true
+            Main.Position = UDim2.new(0.125734463, 0, 0.144399777, 0)
+            Main.Selectable = true
+            Main.Size = UDim2.new(0.748531044, 0, 0.831114769, 0)
+            Main.ZIndex = 2
+            TextButton.Parent = Main
+            TextButton.BackgroundColor3 = Color3.fromRGB(53, 53, 53)
+            TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            TextButton.BorderSizePixel = 0
+            TextButton.Position = UDim2.new(0.115305327, 0, 0.795036614, 0)
+            TextButton.Size = UDim2.new(0, 149, 0, 27)
+            TextButton.Font = Enum.Font.SourceSansBold
+            TextButton.Text = "Close"
+            TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            TextButton.TextSize = 14.000
+            UICorner.Parent = TextButton
+            UICorner_2.CornerRadius = UDim.new(0, 10)
+            UICorner_2.Parent = Main
+            ColrBlock.Name = "ColrBlock"
+            ColrBlock.Parent = Main
+            ColrBlock.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            ColrBlock.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            ColrBlock.BorderSizePixel = 0
+            ColrBlock.Position = UDim2.new(0.819064558, 0, 0.779175282, 0)
+            ColrBlock.Size = UDim2.new(0, 37, 0, 37)
+            UICorner_3.CornerRadius = UDim.new(0, 30)
+            UICorner_3.Parent = ColrBlock
+            Options.Name = "Options"
+            Options.Parent = Main
+            Options.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Options.BackgroundTransparency = 1.000
+            Options.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            Options.BorderSizePixel = 0
+            Options.Position = UDim2.new(0.10215459, 0, 3.59988718e-07, 0)
+            Options.Size = UDim2.new(0, 153, 0, 32)
+            UIListLayout.Parent = Options
+            UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+            UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+            BoxToggle.Name = "BoxToggle"
+            BoxToggle.Parent = Options
+            BoxToggle.BackgroundColor3 = Color3.fromRGB(85, 255, 255)
+            BoxToggle.BackgroundTransparency = 1.000
+            BoxToggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            BoxToggle.BorderSizePixel = 0
+            BoxToggle.Position = UDim2.new(-1.99461297e-07, 0, 0.140625, 0)
+            BoxToggle.Size = UDim2.new(0, 153, 0, 23)
+            UIListLayout_2.Parent = BoxToggle
+            UIListLayout_2.FillDirection = Enum.FillDirection.Horizontal
+            UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
+            UIListLayout_2.VerticalAlignment = Enum.VerticalAlignment.Center
+            ColorBlock.Name = "ColorBlock"
+            ColorBlock.Parent = Main
+            ColorBlock.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            ColorBlock.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            ColorBlock.BorderSizePixel = 2
+            ColorBlock.Position = UDim2.new(0, 29, 0, 36)
+            ColorBlock.Size = UDim2.new(0, 150, 0, 150)
+            ColorBlock.AutoButtonColor = false
+            ColorBlock.Image = "rbxassetid://17073799681"
+            for i,v in pairs({Picker, Picker_2}) do
+                local uistroke = Instance.new("UIStroke", v)
+                uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                uistroke.LineJoinMode = Enum.LineJoinMode.Bevel
+                uistroke.Thickness = 2
+            end
+            Picker.Name = "Picker"
+            Picker.Parent = ColorBlock
+            Picker.AnchorPoint = Vector2.new(0.5, 0.5)
+            Picker.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Picker.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            Picker.BorderSizePixel = 0
+            Picker.Position = UDim2.new(0.5, 0, 1, 0)
+            Picker.Size = UDim2.new(0, 5, 0, 5)
+            ValueBlock.Name = "ValueBlock"
+            ValueBlock.Parent = Main
+            ValueBlock.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            ValueBlock.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            ValueBlock.BorderSizePixel = 2
+            ValueBlock.Position = UDim2.new(0, 214, 0, 36)
+            ValueBlock.Size = UDim2.new(0, 20, 0, 150)
+            ValueBlock.AutoButtonColor = false
+            ValueBlock.Image = "rbxassetid://17073827687"
+            Picker_2.Name = "Picker"
+            Picker_2.Parent = ValueBlock
+            Picker_2.AnchorPoint = Vector2.new(0.5, 0.5)
+            Picker_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Picker_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            Picker_2.BorderSizePixel = 0
+            Picker_2.Position = UDim2.new(0.5, 0, 0, 0)
+            Picker_2.Size = UDim2.new(0, 25, 0, 5)
+            UIListLayout_3.Parent = ColorPicker
+            UIListLayout_3.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            UIListLayout_3.SortOrder = Enum.SortOrder.LayoutOrder
+            UIListLayout_3.VerticalAlignment = Enum.VerticalAlignment.Center
+            Fake.Name = "Fake"
+            Fake.Parent = ColorPicker
+            Fake.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Fake.BackgroundTransparency = 1.000
+            Fake.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            Fake.BorderSizePixel = 0
+            Fake.Position = UDim2.new(0.202380955, 0, 0.833858132, 0)
+            Fake.Size = UDim2.new(0, 200, 0, 20)
+            Fake.Font = Enum.Font.SourceSans
+            Fake.Text = ""
+            Fake.TextColor3 = Color3.fromRGB(0, 0, 0)
+            Fake.TextSize = 14.000
+            TextLabel.Parent = BoxToggle
+            TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            TextLabel.BackgroundTransparency = 1.000
+            TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            TextLabel.BorderSizePixel = 0
+            TextLabel.Size = UDim2.new(0, 80, 0, 23)
+            TextLabel.Font = Enum.Font.SourceSansSemibold
+            TextLabel.Text = "Rainbow Color"
+            TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            TextLabel.TextSize = 13.000
+            TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+            TOGGLEBUTTON.Name = "TOGGLEBUTTON"
+            TOGGLEBUTTON.Parent = BoxToggle
+            TOGGLEBUTTON.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+            TOGGLEBUTTON.BorderColor3 = Color3.fromRGB(255, 255, 255)
+            TOGGLEBUTTON.Position = UDim2.new(0.860000014, 0, 0.140000001, 0)
+            TOGGLEBUTTON.Size = UDim2.new(0, 16, 0, 16)
+            TOGGLEBUTTON.AutoButtonColor = false
+            TOGGLEBUTTON.Font = Enum.Font.SourceSans
+            TOGGLEBUTTON.Text = ""
+            TOGGLEBUTTON.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+                local scripte = ColorPicker
+                
+                local ColorFunc = parameters["Function"] or function() end
+
+                local lastHue, lastSaturation, lastValue = 0, 0, 1
+                local lastcolorvalue = nil
+                local lastcolorblock = nil
+                local touchTap = Enum.UserInputType.Touch
+                local mouse1 = Enum.UserInputType.MouseButton1
+                local mouseMovement = Enum.UserInputType.MouseMovement
+                
+                local inpService = game:GetService("UserInputService")
+                local runService = game:GetService("RunService")
+                
+                local colorPickerMain = scripte
+                local colorPicker = colorPickerMain:WaitForChild("Main")
+                local ColrBlock = colorPicker:WaitForChild("ColrBlock")
+                local colorBlock = colorPicker:WaitForChild("ColorBlock")
+                local valueBlock = colorPicker:WaitForChild("ValueBlock")
+                
+                local pickerColor = colorBlock:WaitForChild("Picker")
+                local pickerValue = valueBlock:WaitForChild("Picker")
+                
+                local colorChanging = false
+                local inputTypeNeeded = mouse1
+                local plrInputHeldDown = false
+                local inputPosition = Vector2.zero
+                
+                local colors = {
+                    RawColor = Color3.fromRGB(255, 255, 255),
+                    RealColor = Color3.fromRGB(255, 255, 255)
+                }
+                
+                if not inpService.MouseEnabled then
+                    inputTypeNeeded = touchTap
+                end
+                
+                if not inpService.MouseEnabled then
+                    inpService.TouchMoved:Connect(function(inp)
+                        inputPosition = inp.Position
+                    end)
+                else
+                    inpService.InputChanged:Connect(function(inp)
+                        if inp.UserInputType == mouseMovement then
+                            inputPosition = inp.Position
+                        end
+                    end)
+                end
+                
+                inpService.InputBegan:Connect(function(inp)
+                    if inp.UserInputType == inputTypeNeeded then
+                        plrInputHeldDown = true
+                    end
+                end)
+                
+                inpService.InputEnded:Connect(function(inp)
+                    if inp.UserInputType == inputTypeNeeded then
+                        plrInputHeldDown = false
+                    end
+                end)
+                
+                local function getNormalizedCursorPosition(mousePosition, frame)
+                    local framePosition = frame.AbsolutePosition
+                    local frameSize = frame.AbsoluteSize
+                
+                    local relativeX = (mousePosition.X - framePosition.X) / frameSize.X
+                    local relativeY = (mousePosition.Y - framePosition.Y) / frameSize.Y
+                
+                    return relativeX, relativeY
+                end
+                
+                colorBlock.InputBegan:Connect(function(inp)
+                    if inp.UserInputType == inputTypeNeeded and pickerColor.Visible then
+                        colorChanging = true
+                        plrInputHeldDown = true
+                        local lastcolor = nil
+                        while plrInputHeldDown do
+                            local xPos, yPos = getNormalizedCursorPosition(inputPosition, colorBlock)
+                            xPos, yPos = math.clamp(xPos, 0, 1), math.clamp(yPos, 0, 1)
+                
+                            pickerColor.Position = UDim2.new(xPos, 0, yPos, 0)
+                
+                            lastHue = 1 - xPos
+                            lastSaturation = 1 - yPos
+                
+                            colors.RawColor = Color3.fromHSV(lastHue, lastSaturation, 1)
+                            colors.RealColor = Color3.fromHSV(lastHue, lastSaturation, lastValue)
+                
+                            colorBlock.BackgroundColor3 = colors.RealColor
+                
+                            runService.Heartbeat:Wait()
+                            valueBlock.ImageColor3 = colors.RawColor
+                            ColrBlock.BackgroundColor3 = colors.RealColor
+                            
+                            if lastcolor ~= colors.RealColor then
+                                Box.BackgroundColor3 = colors.RealColor
+                                lastcolor = colors.RealColor
+                                ColorFunc(colors.RealColor)
+                            end
+                        end
+                        colorChanging = false
+                    end
+                end)
+                
+                valueBlock.InputBegan:Connect(function(inp)
+                    if inp.UserInputType == inputTypeNeeded and pickerValue.Visible then
+                        colorChanging = true
+                        plrInputHeldDown = true
+                        local lastcolor = nil
+                        while plrInputHeldDown do
+                            local _, yPos = getNormalizedCursorPosition(inputPosition, valueBlock)
+                            yPos = math.clamp(yPos, 0, 1)
+                
+                            lastValue = 1 - yPos
+                            pickerValue.Position = UDim2.new(0.5, 0, yPos, 0)
+                
+                            colors.RealColor = Color3.fromHSV(lastHue, lastSaturation, lastValue)
+                            colorBlock.BackgroundColor3 = colors.RealColor
+                
+                            runService.Heartbeat:Wait()
+                            valueBlock.ImageColor3 = colors.RawColor
+                            
+                            ColrBlock.BackgroundColor3 = colors.RealColor
+
+                            if lastcolor ~= colors.RealColor then
+                                Box.BackgroundColor3 = colors.RealColor
+                                lastcolor = colors.RealColor
+                                ColorFunc(colors.RealColor)
+                            end
+
+                        end
+                        colorChanging = false
+                    end
+                end)
+                
+                
+                local function setColor(color)
+                    local h, s, v = color:ToHSV()
+                
+                    lastHue, lastSaturation = h, s
+                    colors.RawColor = Color3.fromHSV(h, s, 1)
+                    colors.RealColor = color
+                
+                    -- Update picker positions
+                    pickerColor.Position = UDim2.new(1 - h, 0, 1 - s, 0)
+                    pickerValue.Position = UDim2.new(0.5, 0, 1 - v, 0)
+                
+                    valueBlock.ImageColor3 = colors.RawColor
+                    ColrBlock.BackgroundColor3 = colors.RealColor
+
+                    Box.BackgroundColor3 = colors.RealColor
+                    ColorFunc(colors.RealColor)
+
+                end
+                
+                
+                
+                
+                local toggled = false
+                
+                
+                ElementData.Trigger = setColor
+
+                local togglebtn = scripte.Main.Options.BoxToggle.TOGGLEBUTTON
+                togglebtn.MouseButton1Click:Connect(function()
+                    local bool = not toggled
+                    if not bool then
+                        pickerColor.Visible = true
+                        pickerValue.Visible = true
+                        togglebtn.BackgroundColor3 = Color3.fromRGB(20,20,20)
+                        togglebtn.BorderColor3 = Color3.fromRGB(255,255,255)
+                        valueBlock.ImageColor3 = lastcolorvalue
+                        ColrBlock.BackgroundColor3 = lastcolorblock
+
+                        Box.BackgroundColor3 = lastcolorblock
+                        ColorFunc(lastcolorblock)
+
+                    else
+                        lastcolorvalue = valueBlock.ImageColor3
+                        lastcolorblock = ColrBlock.BackgroundColor3
+                        pickerColor.Visible = false
+                        pickerValue.Visible = false
+                        valueBlock.ImageColor3 = lastcolorvalue
+                        
+                    end
+                    toggled = bool
+                end)
+                
+                local default = parameters["Default"] or parameters["Initial"]
+
+                if default then
+                    setColor(default)
+                end
+                
+                coroutine.wrap(function()
+                    while task.wait() do
+                        if toggled then
+                            for i = 0,1,0.01 do
+                                if not toggled then break end
+                                ColrBlock.BackgroundColor3 = Color3.fromHSV(i,1,1)
+                                togglebtn.BorderColor3 = Color3.fromHSV(i,1,1)
+                                togglebtn.BackgroundColor3 = Color3.fromHSV(i,1,1)
+                                valueBlock.ImageColor3 = Color3.fromHSV(i,1,1)
+                                Box.BackgroundColor3 = Color3.fromHSV(i,1,1)
+                                ColorFunc(Color3.fromHSV(i,1,1))
+                                wait(0.003)
+                            end
+                        end
+                    end
+                end)()
+                
+        
+
+            TextButton.MouseButton1Click:connect(function()
+                ColorPicker.Visible = false
+            end)
+
+            table.insert(UIElements, ElementData)
+
+            return ElementData
+        end
+
         return PageFunctions
     end
 
     return GuiFunctions
 end
-
 
 return library
