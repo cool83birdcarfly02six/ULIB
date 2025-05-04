@@ -1378,8 +1378,8 @@ function library:CreateGui(parameters)
                 end)
                 
                 local toggled = false
-                local SetColor
-                SetColor = function setColor(color, rainbow)
+                local SetColor = nil
+                SetColor = function(color, rainbow)
 
                     if rainbow then
                         ElementData.Rainbow = true
