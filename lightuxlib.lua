@@ -1522,7 +1522,7 @@ function library:CreateGui(parameters)
             Box.Position = UDim2.new(0.521254301, 0, 0.117000416, 0)
             Box.Size = UDim2.new(0, 68, 0, 17)
             Box.Font = Enum.Font.SourceSansSemibold
-            Box.Text = "Select"
+            Box.Text = parameters["Name"] or parameters["Text"] or "Keybind"
             Box.TextColor3 = Color3.fromRGB(255, 255, 255)
             Box.TextSize = 12.000
             Box.TextStrokeTransparency = 0.000
@@ -1547,7 +1547,16 @@ function library:CreateGui(parameters)
                     end
                 end)
             end
+
+            local function set(input)
+                Box.Text = tostring(input.Name)
+                parameters["Function"](input)
+            end
+
+            ElementData.Trigger = set
+
             Box.MouseButton1Click:Connect(getmyebasdasda)
+            ElementData.Object = Keybind
 
 
 
@@ -1565,5 +1574,6 @@ function library:CreateGui(parameters)
 
     return GuiFunctions
 end
+
 
 return library
