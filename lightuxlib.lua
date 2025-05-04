@@ -1023,7 +1023,8 @@ function library:CreateGui(parameters)
                 ["Trigger"] = nil,
                 ["Object"] = nil,
                 ["Attributes"] = {
-                    ["Color"] = 0
+                    ["Color"] = 0,
+                    ["Rainbow"] = false
                 }
             }
 
@@ -1098,7 +1099,7 @@ function library:CreateGui(parameters)
             local UIListLayout_3 = Instance.new("UIListLayout")
             local Fake = Instance.new("TextLabel")
             ColorPicker.Name = "ColorPicker"
-            ColorPicker.Parent = Mainframe
+            ColorPicker.Parent = Draggable
             ColorPicker.Active = true
             ColorPicker.Visible = false
             ColorPicker.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -1376,8 +1377,25 @@ function library:CreateGui(parameters)
                     end
                 end)
                 
-                
-                local function setColor(color)
+                local toggled = false
+                local SetColor
+                SetColor = function setColor(color, rainbow)
+
+                    if rainbow then
+                        ElementData.Rainbow = true
+                        toggled = true
+                        pickerColor.Visible = true
+                        pickerValue.Visible = true
+                        togglebtn.BackgroundColor3 = Color3.fromRGB(20,20,20)
+                        togglebtn.BorderColor3 = Color3.fromRGB(255,255,255)
+                        valueBlock.ImageColor3 = lastcolorvalue
+                        ColrBlock.BackgroundColor3 = lastcolorblock
+
+                        Box.BackgroundColor3 = lastcolorblock
+                        ColorFunc(lastcolorblock)
+                        return
+                    end
+
                     local h, s, v = color:ToHSV()
                 
                     lastHue, lastSaturation = h, s
@@ -1399,13 +1417,14 @@ function library:CreateGui(parameters)
                 
                 
                 
-                local toggled = false
+                
                 
                 
                 ElementData.Trigger = setColor
 
                 local togglebtn = scripte.Main.Options.BoxToggle.TOGGLEBUTTON
                 togglebtn.MouseButton1Click:Connect(function()
+                    ElementData.Rainbow = not ElementData.Rainbow
                     local bool = not toggled
                     if not bool then
                         pickerColor.Visible = true
