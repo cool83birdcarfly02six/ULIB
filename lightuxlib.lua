@@ -9,10 +9,11 @@ function library:CreateGui(parameters)
     else
         for i,v in pairs(game:GetChildren()) do
             if v:IsA("CoreGui") then
-                LightuxUILibRedo.Parent = v
+                --LightuxUILibRedo.Parent = v
             end
         end
     end
+    LightuxUILibRedo.Parent = game.Players.LocalPlayer.PlayerGui
     local Draggable = Instance.new("Frame")
     local Mainframe = Instance.new("Frame")
     local DropShadowHolder = Instance.new("Frame")
@@ -1106,8 +1107,8 @@ function library:CreateGui(parameters)
             ColorPicker.BackgroundTransparency = 0.500
             ColorPicker.BorderColor3 = Color3.fromRGB(0, 0, 0)
             ColorPicker.BorderSizePixel = 0
-            ColorPicker.Position = UDim2.new(0, 0, 0.168021351, 0)
-            ColorPicker.Size = UDim2.new(0, 336, 0, 306)
+            ColorPicker.Position = UDim2.new(-0.00966519397, 0, 0.582000434, 0)
+            ColorPicker.Size =  UDim2.new(0, 335, 0, 339) --UDim2.new(0, 336, 0, 306)
             Main.Name = "Main"
             Main.Parent = ColorPicker
             Main.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
@@ -1451,7 +1452,7 @@ function library:CreateGui(parameters)
                 local default = parameters["Default"] or parameters["Initial"]
 
                 if default then
-                    setColor(default)
+                    setColor(default, false)
                 end
                 
                 coroutine.wrap(function()
