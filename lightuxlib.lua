@@ -237,12 +237,19 @@ function library:CreateGui(parameters)
                     ["Name"] = v.Name,
                     ["Args"] = {}
                 }
+
+                local inserted = 0
     
                 for a, b in pairs(v.Attributes) do
-                    data.Args[a] = b
+                    if b ~= nil and b ~= "" then
+                        inserted += 1
+                        data.Args[a] = b
+                    end
                 end
-    
-                table.insert(configtable, data)
+                
+                if inserted ~= 0 then
+                    table.insert(configtable, data)
+                end
             end
         end
 
@@ -262,14 +269,48 @@ function library:CreateGui(parameters)
             error("Failed to parse config file: " .. filename)
             return
         end
-    
+        
+        local allowed = {
+            ["Toggle"] = function(element, config)
+                if config.Args.Toggled ~= element.Attributes.Toggled then
+                    return true
+                end
+                return false
+            end,
+            ["Input"] = function(element, config)
+                if config.Args.Text ~= element.Attributes.Text and config.Args.Text ~= "" then
+                    return true
+                end
+                return false
+            end,
+            ["Slider"] = function(element, config)
+                return true
+            end,
+            ["Keybind"] = function(element, config)
+                if element.Attributes.Key ~= config.Args.Key then
+                    return true
+                end
+                return nil
+            end,
+            ["Dropdown"] = function(element, config)
+                if element.Attributes.Selected ~= config.Args.Selected and element.Attributes.Selected ~= nil and element.Attributes.Selected ~= "" then
+                    return true
+                end
+            end
+        }
         for _, config in pairs(Decoded) do
             if config.Args then
                 for _, element in pairs(UIElements) do
-                    if config.Type == element.Type and config.Name == element.Name then
+                    if config.Type == element.Type and config.Name == element.Name and allowed[element.Type] and allowed[element.Type](element, config) then
                         if typeof(element.Trigger) == "function" then
                             table.foreach(config.Args,function(a,b)
-                                element.Trigger(b)
+                                local value = b
+                                if element.Type == "Keybind" then
+                                    value = loadstring("return "..b)()
+                                end
+                                pcall(function()
+                                    element.Trigger(value)
+                                end)
                             end)
                         end
                     end
@@ -513,11 +554,14 @@ function library:CreateGui(parameters)
                 ["PageData"] = PageData,
                 ["Trigger"] = nil,
                 ["Object"] = nil,
+                ["Name"] = nil,
                 ["Attributes"] = {
                     ["Toggled"] = false
                 }
             }
             
+            ElementData.Name = parameters["Name"] or "Toggle"
+
             local Toggle = Instance.new("Frame")
             local TextLabel = Instance.new("TextLabel")
             local TOGGLEBUTTON = Instance.new("TextButton")
@@ -585,6 +629,8 @@ function library:CreateGui(parameters)
                     ["Text"] = ""
                 }
             }
+
+            ElementData.Name = parameters["Name"] or "Input"
 
             local TextBoxFrame = Instance.new("Frame")
             local TextLabel = Instance.new("TextLabel")
@@ -674,10 +720,11 @@ function library:CreateGui(parameters)
                 ["Object"] = nil,
                 ["DropdownsBtns"] = {},
                 ["Attributes"] = {
-                    ["Selected"] = false
+                    ["Selected"] = ""
                 }
             }
 
+            ElementData["Name"] = parameters["Name"] or "Select"
 
             local DroppyDown = Instance.new("Frame")
             ElementData.Object = DroppyDown
@@ -853,7 +900,7 @@ function library:CreateGui(parameters)
                 Droplist.Visible = false
             end
 
-
+            ElementData.Trigger = Select
             if parameters["SearchBox"] or parameters["Search"] then
                 Search.Visible = true
                 Search.Changed:connect(function()
@@ -914,6 +961,7 @@ function library:CreateGui(parameters)
                     ["Value"] = 0
                 }
             }
+            ElementData["Name"] = parameters["Name"] or "Slider"
 
             local SliderInput = Instance.new("Frame")
             ElementData.Object = SliderInput
@@ -1557,8 +1605,13 @@ function library:CreateGui(parameters)
                 ["Type"] = "Keybind",
                 ["PageData"] = PageData,
                 ["Trigger"] = nil,
-                ["Object"] = nil
+                ["Object"] = nil,
+                ["Attributes"] = {
+                    Key = "F"
+                }
             }
+
+            ElementData["Name"] = parameters["Name"] or "Keybind"
 
             local Keybind = Instance.new("Frame")
             local TextLabel = Instance.new("TextLabel")
@@ -1592,7 +1645,7 @@ function library:CreateGui(parameters)
             Box.Position = UDim2.new(0.521254301, 0, 0.117000416, 0)
             Box.Size = UDim2.new(0, 68, 0, 17)
             Box.Font = Enum.Font.SourceSansSemibold
-            Box.Text = ""
+            Box.Text = "F"
             Box.TextColor3 = Color3.fromRGB(255, 255, 255)
             Box.TextSize = 12.000
             Box.TextStrokeTransparency = 0.000
@@ -1604,22 +1657,25 @@ function library:CreateGui(parameters)
                 Box.Text = "..."
                 local inputEvent
                 inputEvent = userInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-                    if not gameProcessedEvent then
+                    --if not gameProcessedEvent then
                         wait(0.05)
                         if tostring(input.KeyCode.Name) ~= "Unknown" then
                             Box.Text = "" .. tostring(input.KeyCode.Name)
+                            ElementData.Attributes.Key = tostring(input.KeyCode)
                             parameters["Function"](input.KeyCode)
                         else
                             Box.Text = "" .. tostring(input.UserInputType.Name)
+                            ElementData.Attributes.Key = tostring(input.UserInputType)
                             parameters["Function"](input.UserInputType)
                         end
                         inputEvent:Disconnect()
-                    end
+                    --end
                 end)
             end
 
             local function set(input)
                 Box.Text = tostring(input.Name)
+                ElementData.Attributes.Key = tostring(input)
                 parameters["Function"](input)
             end
 
