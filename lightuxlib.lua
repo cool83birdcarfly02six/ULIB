@@ -13,6 +13,7 @@ function library:CreateGui(parameters)
             end
         end
     end
+    --LightuxUILibRedo.Parent = game.Players.LocalPlayer.PlayerGui
     local Draggable = Instance.new("Frame")
     local Mainframe = Instance.new("Frame")
     local DropShadowHolder = Instance.new("Frame")
@@ -212,6 +213,73 @@ function library:CreateGui(parameters)
         end
     end
 
+    GuiFunctions.GuiObject = LightuxUILibRedo
+
+    local function parse(content)
+        local success,what = pcall(function()
+            return game:GetService("HttpService"):JSONDecode(content)
+        end)
+        if success then
+            return what
+        else
+            return false
+        end
+    end
+    
+    function GuiFunctions:SaveConfig(parameters)
+        local filename = parameters["FileName"] or parameters["Name"] or "config"
+        local configtable = {}
+    
+        for _, v in pairs(UIElements) do
+            if v["Attributes"] then
+                local data = {
+                    ["Type"] = v.Type,
+                    ["Name"] = v.Name,
+                    ["Args"] = {}
+                }
+    
+                for a, b in pairs(v.Attributes) do
+                    data.Args[a] = b
+                end
+    
+                table.insert(configtable, data)
+            end
+        end
+
+        writefile(filename, game:GetService("HttpService"):JSONEncode(configtable))
+        return configtable
+    end
+
+    function GuiFunctions:LoadConfig(parameters)
+        local filename = parameters["FileName"] or parameters["Name"] or "config"
+        if not isfile(filename) then
+            error("File does not exist: " .. filename)
+            return
+        end
+    
+        local Decoded = parse(readfile(filename))
+        if not Decoded then
+            error("Failed to parse config file: " .. filename)
+            return
+        end
+    
+        for _, config in pairs(Decoded) do
+            if config.Args then
+                for _, element in pairs(UIElements) do
+                    if config.Type == element.Type and config.Name == element.Name then
+                        if typeof(element.Trigger) == "function" then
+                            table.foreach(config.Args,function(a,b)
+                                element.Trigger(b)
+                            end)
+                        end
+                    end
+                end
+            end
+        end
+    
+        return true
+    end
+    
     
 
     function GuiFunctions:AddPage(parameters)
@@ -1410,6 +1478,7 @@ function library:CreateGui(parameters)
                     ColrBlock.BackgroundColor3 = colors.RealColor
 
                     Box.BackgroundColor3 = colors.RealColor
+                    ElementData.Attributes.Color = colors.RealColor
                     ColorFunc(colors.RealColor)
 
                 end
@@ -1464,6 +1533,7 @@ function library:CreateGui(parameters)
                                 togglebtn.BackgroundColor3 = Color3.fromHSV(i,1,1)
                                 valueBlock.ImageColor3 = Color3.fromHSV(i,1,1)
                                 Box.BackgroundColor3 = Color3.fromHSV(i,1,1)
+                                ElementData.Attributes.Color = Color3.fromHSV(i,1,1)
                                 ColorFunc(Color3.fromHSV(i,1,1))
                                 wait(0.003)
                             end
@@ -1510,7 +1580,7 @@ function library:CreateGui(parameters)
             TextLabel.Position = UDim2.new(0.0450001247, 0, 0, 0)
             TextLabel.Size = UDim2.new(0, 117, 0, 23)
             TextLabel.Font = Enum.Font.SourceSansSemibold
-            TextLabel.Text = "BoxChoice"
+            TextLabel.Text = parameters["Name"] or parameters["Text"] or "Keybind"
             TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
             TextLabel.TextSize = 13.000
             TextLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -1522,7 +1592,7 @@ function library:CreateGui(parameters)
             Box.Position = UDim2.new(0.521254301, 0, 0.117000416, 0)
             Box.Size = UDim2.new(0, 68, 0, 17)
             Box.Font = Enum.Font.SourceSansSemibold
-            Box.Text = parameters["Name"] or parameters["Text"] or "Keybind"
+            Box.Text = ""
             Box.TextColor3 = Color3.fromRGB(255, 255, 255)
             Box.TextSize = 12.000
             Box.TextStrokeTransparency = 0.000
@@ -1574,6 +1644,5 @@ function library:CreateGui(parameters)
 
     return GuiFunctions
 end
-
 
 return library
