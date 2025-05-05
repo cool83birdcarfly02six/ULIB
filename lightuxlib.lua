@@ -228,6 +228,7 @@ function library:CreateGui(parameters)
     
     function GuiFunctions:SaveConfig(parameters)
         local filename = parameters["FileName"] or parameters["Name"] or "config"
+        filename = filename..".json"
         local configtable = {}
     
         for _, v in pairs(UIElements) do
@@ -259,6 +260,7 @@ function library:CreateGui(parameters)
 
     function GuiFunctions:LoadConfig(parameters)
         local filename = parameters["FileName"] or parameters["Name"] or "config"
+        filename = filename..".json"
         if not isfile(filename) then
             error("File does not exist: " .. filename)
             return
@@ -270,6 +272,7 @@ function library:CreateGui(parameters)
             return
         end
         
+        local blacklist = parameters["Exclude"] or parameters["Excluded"] or {}
         local allowed = {
             ["Toggle"] = function(element, config)
                 if config.Args.Toggled ~= element.Attributes.Toggled then
@@ -296,21 +299,32 @@ function library:CreateGui(parameters)
                 if element.Attributes.Selected ~= config.Args.Selected and element.Attributes.Selected ~= nil and element.Attributes.Selected ~= "" then
                     return true
                 end
+            end,
+            ["ColorPicker"] = function(element, config)
+                return true
             end
         }
         for _, config in pairs(Decoded) do
             if config.Args then
                 for _, element in pairs(UIElements) do
-                    if config.Type == element.Type and config.Name == element.Name and allowed[element.Type] and allowed[element.Type](element, config) then
+                    if config.Type == element.Type and config.Name == element.Name and allowed[element.Type] and allowed[element.Type](element, config) and not table.find(blacklist, element.Name) then
                         if typeof(element.Trigger) == "function" then
+
+                            if element.Type == "ColorPicker" then
+                                element.Trigger(loadstring("return Color3.new("..tostring(config.Args.Color)..")")(), config.Args.Rainbow)
+                                continue
+                            end
+
                             table.foreach(config.Args,function(a,b)
                                 local value = b
                                 if element.Type == "Keybind" then
                                     value = loadstring("return "..b)()
                                 end
+
                                 pcall(function()
                                     element.Trigger(value)
                                 end)
+                                
                             end)
                         end
                     end
@@ -1144,6 +1158,7 @@ function library:CreateGui(parameters)
                 }
             }
 
+            ElementData.Name = parameters["Name"] or "Pick Color"
             local ColorPicker = Instance.new("Frame")
             local ColorBox = Instance.new("Frame")
             local TextLabel = Instance.new("TextLabel")
@@ -1455,6 +1470,7 @@ function library:CreateGui(parameters)
                             if lastcolor ~= colors.RealColor then
                                 Box.BackgroundColor3 = colors.RealColor
                                 lastcolor = colors.RealColor
+                                ElementData.Attributes.Color = tostring(colors.RealColor)
                                 ColorFunc(colors.RealColor)
                             end
                         end
@@ -1485,6 +1501,7 @@ function library:CreateGui(parameters)
                             if lastcolor ~= colors.RealColor then
                                 Box.BackgroundColor3 = colors.RealColor
                                 lastcolor = colors.RealColor
+                                ElementData.Attributes.Color = tostring(colors.RealColor)
                                 ColorFunc(colors.RealColor)
                             end
 
@@ -1492,26 +1509,33 @@ function library:CreateGui(parameters)
                         colorChanging = false
                     end
                 end)
-                
+                local togglebtn = scripte.Main.Options.BoxToggle.TOGGLEBUTTON
                 local toggled = false
                 local SetColor = nil
                 SetColor = function(color, rainbow)
 
                     if rainbow then
-                        ElementData.Rainbow = true
+                        ElementData.Attributes.Rainbow = true
                         toggled = true
+                        pickerColor.Visible = false
+                        pickerValue.Visible = false
+
+                        Box.BackgroundColor3 = lastcolorblock
+                        colors.RealColor = lastcolorblock
+                        ColorFunc(lastcolorblock)
+                        return
+                    else
+                        ElementData.Attributes.Rainbow = false
                         pickerColor.Visible = true
                         pickerValue.Visible = true
                         togglebtn.BackgroundColor3 = Color3.fromRGB(20,20,20)
                         togglebtn.BorderColor3 = Color3.fromRGB(255,255,255)
                         valueBlock.ImageColor3 = lastcolorvalue
                         ColrBlock.BackgroundColor3 = lastcolorblock
-
+                        colors.RealColor = lastcolorblock
                         Box.BackgroundColor3 = lastcolorblock
-                        ColorFunc(lastcolorblock)
-                        return
                     end
-
+                    
                     local h, s, v = color:ToHSV()
                 
                     lastHue, lastSaturation = h, s
@@ -1526,7 +1550,7 @@ function library:CreateGui(parameters)
                     ColrBlock.BackgroundColor3 = colors.RealColor
 
                     Box.BackgroundColor3 = colors.RealColor
-                    ElementData.Attributes.Color = colors.RealColor
+                    ElementData.Attributes.Color = tostring(colors.RealColor)
                     ColorFunc(colors.RealColor)
 
                 end
@@ -1537,12 +1561,11 @@ function library:CreateGui(parameters)
                 
                 
                 
-                ElementData.Trigger = setColor
+                ElementData.Trigger = SetColor
 
-                local togglebtn = scripte.Main.Options.BoxToggle.TOGGLEBUTTON
+                
                 togglebtn.MouseButton1Click:Connect(function()
-                    ElementData.Rainbow = not ElementData.Rainbow
-                    local bool = not toggled
+                    local bool = not ElementData.Attributes.Rainbow
                     if not bool then
                         pickerColor.Visible = true
                         pickerValue.Visible = true
@@ -1562,26 +1585,32 @@ function library:CreateGui(parameters)
                         valueBlock.ImageColor3 = lastcolorvalue
                         
                     end
-                    toggled = bool
+                    ElementData.Attributes.Rainbow = bool
                 end)
                 
                 local default = parameters["Default"] or parameters["Initial"]
 
                 if default then
+                    lastcolorvalue = default
+                    lastcolorblock = default
                     SetColor(default, false)
+                else
+                    lastcolorvalue = Color3.fromRGB(255,255,255)
+                    lastcolorblock = Color3.fromRGB(255,255,255)
+                    ElementData.Attributes.Color = tostring(lastcolorblock)
                 end
                 
                 coroutine.wrap(function()
                     while task.wait() do
-                        if toggled then
+                        if ElementData.Attributes.Rainbow then
                             for i = 0,1,0.01 do
-                                if not toggled then break end
+                                if not ElementData.Attributes.Rainbow then break end
                                 ColrBlock.BackgroundColor3 = Color3.fromHSV(i,1,1)
                                 togglebtn.BorderColor3 = Color3.fromHSV(i,1,1)
                                 togglebtn.BackgroundColor3 = Color3.fromHSV(i,1,1)
                                 valueBlock.ImageColor3 = Color3.fromHSV(i,1,1)
                                 Box.BackgroundColor3 = Color3.fromHSV(i,1,1)
-                                ElementData.Attributes.Color = Color3.fromHSV(i,1,1)
+                                ElementData.Attributes.Color = tostring(Color3.fromHSV(i,1,1))
                                 ColorFunc(Color3.fromHSV(i,1,1))
                                 wait(0.003)
                             end
