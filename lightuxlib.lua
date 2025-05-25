@@ -1724,6 +1724,24 @@ function library:CreateGui(parameters)
             return ElementData
         end
 
+
+        function PageFunctions:AddTitle(parameters)
+            local Title_2 = Instance.new("TextLabel")
+            Title_2.Name = "Title"
+            Title_2.Parent = Title
+            Title_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Title_2.BackgroundTransparency = 1.000
+            Title_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            Title_2.BorderSizePixel = 0
+            Title_2.Position = UDim2.new(0.0450001247, 0, 3.98055363e-06, 0)
+            Title_2.Size = UDim2.new(0, 145, 0, 25)
+            Title_2.Font = Enum.Font.SourceSansBold
+            Title_2.Text = parameters["Name"] or parameters["Text"] or "Title"
+            Title_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Title_2.TextSize = 16.000
+            Title_2.TextXAlignment = Enum.TextXAlignment.Left
+        end
+
         return PageFunctions
     end
 
