@@ -339,6 +339,7 @@ function library:CreateGui(parameters)
 
     function GuiFunctions:AddPage(parameters)
         local PageFunctions = {}
+        local DropdownBoxes = {}
         local SizeMultiplier = 7.071428571428571
         local NavigationButton = Instance.new("TextButton")
         local Page = Instance.new("ScrollingFrame")
@@ -580,7 +581,11 @@ function library:CreateGui(parameters)
             local TextLabel = Instance.new("TextLabel")
             local TOGGLEBUTTON = Instance.new("TextButton")
             Toggle.Name = "Toggle"
-            Toggle.Parent = GetGroup(parameters["Group"] or "Main")
+            if parameters["DropdownBox"] and  DropdownBoxes[parameters["DropdownBox"]] then
+                Toggle.Parent = DropdownBoxes[parameters["DropdownBox"]]
+            else
+                Toggle.Parent = GetGroup(parameters["Group"] or "Main")
+            end
             Toggle.BackgroundColor3 = Color3.fromRGB(85, 255, 255)
             Toggle.BackgroundTransparency = 1.000
             Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -613,14 +618,14 @@ function library:CreateGui(parameters)
             local function OnToggle(Toggled)
                 if Toggled == true then
                     ElementData["Attributes"].Toggled = true
-                    parameters["Function"](true)
                     game:GetService("TweenService"):Create(TOGGLEBUTTON, TweenInfo.new(0, Enum.EasingStyle.Linear), {BackgroundColor3 = ThemeColor}):Play()
                     TOGGLEBUTTON.AutoButtonColor = false
+                    parameters["Function"](true)
                 elseif Toggled == false then
                     ElementData["Attributes"].Toggled = false
-                    parameters["Function"](false)
                     game:GetService("TweenService"):Create(TOGGLEBUTTON, TweenInfo.new(0, Enum.EasingStyle.Linear), {BackgroundColor3 = Color3.fromRGB(20,20,20)}):Play()
                     TOGGLEBUTTON.AutoButtonColor = true
+                    parameters["Function"](false)
                 end
             end
             ElementData.Trigger = OnToggle
@@ -1724,11 +1729,92 @@ function library:CreateGui(parameters)
             return ElementData
         end
 
+        function PageFunctions:AddDropdownBox(parameters)
+            local States = {
+                Opened = false,
+                Objects = {},
+                RotateData = {
+                    [true] = 180,
+                    [false] = 0,
+                }
+            }
+            local DropdownsGroup = Instance.new("Frame")
+            local Frame = Instance.new("TextButton")
+            local UIListLayout = Instance.new("UIListLayout")
+            local GroupName = Instance.new("TextLabel")
+            local ImageLabel = Instance.new("ImageLabel")
+            local UIListLayout_2 = Instance.new("UIListLayout")
+            local uistroke = Instance.new("UIStroke", DropdownsGroup)
+            uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            uistroke.Color = Color3.new(0.117647, 0.117647, 0.117647)
+            DropdownsGroup.Name = "DropdownsGroup"
+            DropdownsGroup.Parent = GetGroup(parameters["Group"] or "Main")
+            DropdownsGroup.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+            DropdownsGroup.BackgroundTransparency = 1.000
+            DropdownsGroup.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            DropdownsGroup.BorderSizePixel = 0
+            DropdownsGroup.Position = UDim2.new(0.0318471342, 0, 0.668896317, 0)
+            DropdownsGroup.Size = UDim2.new(0, 147, 0, 23)
+            DropdownsGroup.AutomaticSize = "Y"
+            Frame.Name = "Frame"
+            Frame.Parent = DropdownsGroup
+            Frame.Active = false
+            Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+            Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            Frame.BorderSizePixel = 0
+            Frame.Position = UDim2.new(0.00999999978, 0, 0, 0)
+            Frame.Selectable = false
+            Frame.Size = UDim2.new(0, 147, 0, 23)
+            Frame.Text = ""
+            --UIListLayout.Parent = Frame
+            UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+            UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+            UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+            GroupName.Name = "GroupName"
+            GroupName.Parent = Frame
+            GroupName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            GroupName.BackgroundTransparency = 1.000
+            GroupName.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            GroupName.BorderSizePixel = 0
+            GroupName.Position = UDim2.new(0.042, 0, 0, 0)
+            GroupName.Size = UDim2.new(0, 114, 0, 23)
+            GroupName.Font = Enum.Font.SourceSansSemibold
+            GroupName.Text = parameters["Name"] or parameters["Text"] or "None"
+            GroupName.TextColor3 = Color3.fromRGB(255, 255, 255)
+            GroupName.TextSize = 13.000
+            ImageLabel.Parent = Frame
+            ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            ImageLabel.BackgroundTransparency = 1.000
+            ImageLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            ImageLabel.BorderSizePixel = 0
+            ImageLabel.Position = UDim2.new(0.878, 0,0.278, 0)
+            ImageLabel.Rotation = 180.000
+            ImageLabel.Size = UDim2.new(0, 10, 0, 10)
+            ImageLabel.Image = "rbxassetid://85736156388097"
+            UIListLayout_2.Parent = DropdownsGroup
+            UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
+            DropdownBoxes[parameters["ID"] or tostring(math.random())] = DropdownsGroup
+            Frame.MouseButton1Click:connect(function()
+                game:GetService("TweenService"):Create(ImageLabel, TweenInfo.new(0.2), {Rotation = States.RotateData[States.Opened]}):Play()
+                States.Opened = not States.Opened
+                for i,v in pairs(States.Objects) do
+                    v.Visible = States.Opened
+                end
+            end)
+            DropdownsGroup.ChildAdded:connect(function(ch)
+                ch.Visible = false
+                table.insert(States.Objects, ch)
+                ch.Size = UDim2.new(0, 148,0, 23)
+            end)
+
+            return States
+        end
 
         function PageFunctions:AddTitle(parameters)
             local Title_2 = Instance.new("TextLabel")
             Title_2.Name = "Title"
-            Title_2.Parent = Title
+            Title_2.Parent = GetGroup(parameters["Group"] or "Main")
             Title_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             Title_2.BackgroundTransparency = 1.000
             Title_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
