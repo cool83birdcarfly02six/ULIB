@@ -1813,7 +1813,6 @@ function library:CreateGui(parameters)
                 end
             end)
             DropdownsGroup.ChildAdded:connect(function(ch)
-                print(ch)
                 ch.Visible = false
                 table.insert(States.Objects, ch)
                 ch.Size = UDim2.new(0, 148,0, 23)
