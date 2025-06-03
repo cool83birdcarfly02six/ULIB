@@ -13,7 +13,6 @@ function library:CreateGui(parameters)
             end
         end
     end
-    --LightuxUILibRedo.Parent = game.Players.LocalPlayer.PlayerGui
     local Draggable = Instance.new("Frame")
     local Mainframe = Instance.new("Frame")
     local DropShadowHolder = Instance.new("Frame")
@@ -304,6 +303,16 @@ function library:CreateGui(parameters)
                 return true
             end
         }
+        table.sort(UIElements, function(a, b)
+            if a.Type == "ColorPicker" and b.Type ~= "ColorPicker" then
+                return true
+            elseif a.Type ~= "ColorPicker" and b.Type == "ColorPicker" then
+                return false
+            else
+                return false -- Preserve original order if equal priority
+            end
+        end)
+
         for _, config in pairs(Decoded) do
             if config.Args then
                 for _, element in pairs(UIElements) do
@@ -1539,6 +1548,7 @@ function library:CreateGui(parameters)
                         ColrBlock.BackgroundColor3 = lastcolorblock
                         colors.RealColor = lastcolorblock
                         Box.BackgroundColor3 = lastcolorblock
+                        
                     end
                     
                     local h, s, v = color:ToHSV()
@@ -1803,6 +1813,7 @@ function library:CreateGui(parameters)
                 end
             end)
             DropdownsGroup.ChildAdded:connect(function(ch)
+                print(ch)
                 ch.Visible = false
                 table.insert(States.Objects, ch)
                 ch.Size = UDim2.new(0, 148,0, 23)
