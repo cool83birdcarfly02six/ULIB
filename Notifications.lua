@@ -78,6 +78,7 @@ function Notification.Notify(mode, text, duration)
 		Label.TextTransparency = 1
 		Label.Text = text
 		Label.Parent = Frame
+		Label.TextWrapped = true
 
 		local Bar = Instance.new("Frame")
 		Bar.Size = UDim2.new(1,0,0,3)
