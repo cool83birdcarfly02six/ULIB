@@ -143,7 +143,7 @@ function Notification.Notify(mode, text, duration)
 end
 
 
-function Notification.Confirm(text, callback, duration)
+function Notification.Confirm(text, duration)
 	task.spawn(function()
 		duration = duration or 10
 
@@ -312,6 +312,8 @@ function Notification.Confirm(text, callback, duration)
 		task.delay(duration,function()
 			CloseConfirm(false)
 		end)
+
+        repeat task.wait() until closed
 	end)
 end
 
