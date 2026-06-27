@@ -245,7 +245,7 @@ function Main.Functions:Stop()
 			Times += #Items
 			
 		end
-		print(Times)
+		
 		if Times == 0 then
 			self.CharacterObject.Motors[LimbName].C0 = self.CharacterObject.DefaultC0[LimbName]
 		end
